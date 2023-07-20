@@ -1,0 +1,157 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Cat";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var catBreedId = "";
+    var catname = "";
+    var dob = "";
+    var catGender = "";
+    var catColor = "";
+    var sellingLocation = "";
+    var price = "";
+    var sellingStatus = "";
+    var catId = "";
+
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            catId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM Cats WHERE CatId = '{0}'", catId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        catBreedId = result["CatBreedID"].ToString();
+                        catname = result["CatName"].ToString();
+                        dob = result["DOB"].ToString();
+                        catGender = result["CatGender"].ToString();
+                        catColor = result["CatColor"].ToString();
+                        sellingLocation = result["SellingLocation"].ToString();
+                        price = result["price"].ToString();
+                        sellingStatus = result["SaleStatuts"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No cat was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No cat was found for that ID.");
+        }
+    }
+
+    //delete the card
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+
+        catId = Request.Form["catId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("DELETE FROM Cats WHERE CatId='{0}'", catId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDCats");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Delete a Cat</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Cat Information</legend>
+
+        <p>
+            <span>Cat Breed ID:</span>
+            <span>@catBreedId</span>
+        </p>
+
+        <p>
+            <span>Cat Name:</span>
+            <span>@catname</span>
+        </p>
+
+        <p>
+            <span>Date of Birth:</span>
+            <span>@dob</span>
+        </p>
+        <p>
+            <span>Cat Gender:</span>
+            <span>@catGender</span>
+        </p>
+
+        <p>
+            <span>Cat Color:</span>
+            <span>@catColor</span>
+        </p>
+
+        <p>
+            <span>Selling Location</span>
+            <span>@sellingLocation</span>
+        </p>
+        <p>
+            <span>Price:</span>
+            <span>@price</span>
+        </p>
+
+        <p>
+            <span>Selling Status:</span>
+            <span>@sellingStatus</span>
+        </p>
+
+        <input type="hidden" name="catid" value="@catId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Cat" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCats.cshtml">Return to Cats listing</a></p>
+</form>

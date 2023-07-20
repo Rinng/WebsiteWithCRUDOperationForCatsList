@@ -1,0 +1,159 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Card";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var memberId = "";
+    var cardNumber = "";
+    var cardHolderName = "";
+    var experationDate = "";
+    var securityCode = "";
+    var address = "";
+    var city = "";
+    var state = "";
+    var zip = "";
+    var cardId = "";
+
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            cardId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM Cards WHERE CardId = '{0}'", cardId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        memberId = result["MemberID"].ToString();
+                        cardNumber = result["CardNumber"].ToString();
+                        cardHolderName = result["CardHolderName"].ToString();
+                        experationDate = result["ExperationDate"].ToString();
+                        securityCode = result["SecurityCode"].ToString();
+                        address = result["Address"].ToString();
+                        city = result["City"].ToString();
+                        state = result["State"].ToString();
+                        zip = result["Zip"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No card was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No card was found for that ID.");
+        }
+    }
+
+    //delete the card
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+
+        cardId = Request.Form["cardId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("DELETE FROM Cards WHERE CardId='{0}'", cardId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDCard");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Delete a Card</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            <span>Member ID:</span>
+            <span>@memberId</span>
+        </p>
+
+        <p>
+            <span>Card Number:</span>
+            <span>@cardNumber</span>
+        </p>
+
+        <p>
+            <span>Card Holder Name:</span>
+            <span>@cardHolderName</span>
+        </p>
+        <p>
+            <span>Experation Date:</span>
+            <span>@experationDate</span>
+        </p>
+
+        <p>
+            <span>Address:</span>
+            <span>@address</span>
+        </p>
+
+        <p>
+            <span>City</span>
+            <span>@city</span>
+        </p>
+        <p>
+            <span>State:</span>
+            <span>@state</span>
+        </p>
+
+        <p>
+            <span>Zip:</span>
+            <span>@zip</span>
+        </p>
+
+        <input type="hidden" name="cardid" value="@cardId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Card" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCard">Return to Cards listing</a></p>
+</form>

@@ -1,0 +1,83 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "add Cat Breed";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+
+
+    //add CAT BREED
+    if (IsPost)
+    {
+
+
+        var catBreed = Request.Form["catBreed"];
+        var description = Request.Form["description"];
+        var picture = Request.Form["picture"];
+
+        @Function.AddCatBreedFunc(catBreed, description, picture);
+       
+
+        Response.Redirect("~/ADOCRUDCatBreed");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Add The Breed</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            
+            <label for="catBreed">Cat Breed:</label>
+            <input type="text" name="catBreed" value="" />
+        </p>
+
+        <p>
+            
+            <label for="description">Description:</label>
+            <input type="text" name="description" value="" />
+        </p>
+
+        <p>
+           
+            <label for="picture">picture:</label>
+            <input type="file" name="picture" value="" />
+        </p>
+       
+        <input type="hidden" name="catBreedid" value="" />
+        <p><input type="submit" name="buttonAdd" value="Add Breed" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCatBreed.cshtml">Return to Cat Breed listing</a></p>
+</form>

@@ -1,0 +1,185 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+        Page.Title = "Edit a Card";
+        //Layout = "Your Layout Page goes here";
+        Layout = "~/Shared/_Layout.cshtml";
+
+        var memberId = "";
+        var cardNumber = "";
+        var cardHolderName = "";
+        var experationDate = "";
+        var securityCode = "";
+        var address = "";
+        var city = "";
+        var state = "";
+        var zip = "";
+        var cardId = "";
+
+        //get information for comfirmation
+        if (!IsPost)
+        {
+            if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+            {
+                cardId = Request.QueryString["Id"];
+                string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+                using (SqlConnection con = new SqlConnection(cstr))
+                {
+                    con.Open();
+                    string query = string.Format("SELECT * FROM Cards WHERE CardId = '{0}'", cardId);
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        SqlDataReader result = cmd.ExecuteReader();
+
+
+                        if (result.HasRows)
+                        {
+                            result.Read();
+                            memberId = result["MemberID"].ToString();
+                            cardNumber = result["CardNumber"].ToString();
+                            cardHolderName = result["CardHolderName"].ToString();
+                            experationDate = result["ExperationDate"].ToString();
+                            securityCode = result["SecurityCode"].ToString();
+                            address = result["Address"].ToString();
+                            city = result["City"].ToString();
+                            state = result["State"].ToString();
+                            zip = result["Zip"].ToString();
+                        }
+                        else
+                        {
+                            Validation.AddFormError("No card was found for that ID.");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Validation.AddFormError("No card was found for that ID.");
+            }
+        }
+
+        //Update the cards
+        if (IsPost)
+        {
+            Validation.RequireField("memberId", "You must enter a Member ID");
+            Validation.RequireField("cardNumber", "Card Number is required");
+            Validation.RequireField("cardHolderName", "You haven't entered a card holder name");
+            Validation.RequireField("experationDate", "You haven't enterd Experation Date");            
+            Validation.RequireField("address", "You haven't entered Address");
+            Validation.RequireField("city", "You haven't entered city");
+            Validation.RequireField("state", "You haven't entered a state");
+            Validation.RequireField("zip", "You haven't entered the zip code");
+            Validation.RequireField("cardId", "No card ID was submitted!");
+
+            memberId = Request.Form["memberId"];
+            cardNumber = Request.Form["cardNumber"];
+            cardHolderName = Request.Form["cardHolderName"];
+            experationDate = Request.Form["experationDate"];
+            securityCode = Request.Form["securityCode"];
+            address = Request.Form["address"];
+            city = Request.Form["city"];
+            state = Request.Form["state"];
+            zip = Request.Form["zip"];
+            cardId = Request.Form["cardId"];
+
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("UPDATE Cards SET  MemberId= '{0}', CardNumber = '{1}', "
+                    +"CardHolderName = '{2}', ExperationDate = '{3}', SecurityCode = '{4}', "
+                    +"Address = '{5}', City = '{6}', State = '{7}', Zip = '{8}' WHERE CardId = '{9}'", 
+                    memberId, cardNumber, cardHolderName, experationDate, securityCode, address, city,
+                    state, zip ,cardId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    var result = cmd.ExecuteScalar();
+                }
+            }
+
+            Response.Redirect("~/ADOCRUDCard");
+        }
+
+    }
+    @section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Update a Card</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            <label for="memberId">Member ID:</label>
+            <input type="text" name="memberId" value="@memberId" />
+        </p>
+
+        <p>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" name="cardNumber" value="@cardNumber" />
+        </p>
+
+        <p>
+            <label for="cardHolderName">Card Holder Name:</label>
+            <input type="text" name="cardHolderName" value="@cardHolderName" />
+        </p>
+        <p>
+            <label for="experationDate">Experation Date:</label>
+            <input type="text" name="experationDate" value="@experationDate" />
+        </p>
+        <p>
+            <label for="securityCode">Security Code:</label>
+            <input type="text" name="securityCode" value="@securityCode" />
+        </p>
+
+        <p>
+            <label for="address">Address:</label>
+            <input type="text" name="address" value="@address" />
+        </p>
+
+        <p>
+            <label for="city">City:</label>
+            <input type="text" name="city" value="@city" />
+        </p>
+        <p>
+            <label for="state">State:</label>
+            <input type="text" name="state" value="@state" />
+        </p>
+
+        <p>
+            <label for="zip">Zip Code:</label>
+            <input type="text" name="zip" value="@zip" />
+        </p>
+
+        <input type="hidden" name="cardid" value="@cardId" />
+        <p><input type="submit" name="buttonUpdate" value="Update Card" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCard">Return to Cards listing</a></p>
+</form>

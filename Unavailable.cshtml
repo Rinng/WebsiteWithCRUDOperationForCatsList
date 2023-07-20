@@ -1,0 +1,73 @@
+﻿  @{
+      Page.Title = "Looking for a cat";
+      //Layout = "Your Layout Page goes here";
+      Layout = "~/Shared/_Layout.cshtml";
+      
+}
+
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+
+
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+<div class="unbox">
+    @if (Session["username2"] == null)
+    {    }
+    else
+    {   <p id="greet">Welcome back @Session["username2"]</p> }
+    <a href="~/LoginForm.cshtml" ; id="register">
+        @if (Session["username2"] == null)
+        {
+            <b style="background:skyblue;">SignIn</b>
+        }
+        else
+        {
+            <b>Signout</b>
+        }
+    </a>   </div>
+
+<div class="container unbox" style="height:550px; text-align:center; line-height:500px">
+   
+    <h1 style="text-align:center; vertical-align:middle; display:inline-block; line-height:normal;">OOPS! Were are currently developping the social media pages. Come back later when it available.</h1>
+</div>
+@* Display a cookie when the users log in *@
+@if (Session["username2"] == null)
+{ }
+else
+{
+    foreach (string x in Request.Cookies)
+    {
+        if (Request.Cookies[x].HasKeys)
+        {
+            foreach (string y in Request.Cookies[x].Values)
+            {
+                if (y == "lastVist")
+                {
+                    <p>last visted: @Request.Cookies[x][y]</p>
+                }
+
+            }
+
+        }
+    }
+}    

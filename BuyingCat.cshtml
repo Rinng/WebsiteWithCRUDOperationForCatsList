@@ -1,0 +1,222 @@
+﻿  @{
+      Page.Title = "Looking for a cat";
+      //Layout = "Your Layout Page goes here";
+      Layout = "~/Shared/_Layout.cshtml";
+
+      
+      }
+     
+
+@section header {
+
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+        
+    </nav>
+    
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+@* dispaly the session *@
+<div class="centerbox">
+    @if (Session["username2"] == null)
+    { }
+    else
+    {<p id="greet">Welcome back @Session["username2"]</p> }
+    <a href="~/LoginForm.cshtml" ; id="register">
+        @if (Session["username2"] == null)
+        {
+            <b style="background:skyblue;">SignIn</b>
+        }
+        else
+        {
+            <b>Signout</b>
+        }
+    </a>
+    
+</div>
+<section class="center row bg-primary">    
+    <div class="col-xs-4 col-sm-3 centerbox">
+        <img src="images/American-Shorthair-kitten-cute.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/Vicky0001.cshtml">
+            <p>
+                <strong>Vicky</strong><br />
+                Scottish Fold<br />
+                Seattle, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-4 col-sm-3 centerbox">
+        <img src="images/selling cat/Fur.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0002Fur.cshtml">
+            <p>
+                <strong>Fur</strong><br />
+                Male<br />
+                Seattle, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-4 col-sm-3 centerbox">
+        <img src="images/selling cat/Pong.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0003Pong.cshtml">
+            <p>
+                <strong>Pong</strong><br />
+                Male<br />
+                Renton, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-4 col-sm-3 centerbox">
+        <img src="images/selling cat/Christina.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0004Christina.cshtml">
+            <p>
+                <strong>Christina</strong><br />
+                Female<br />
+                Redmond, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/Dream.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0005Dream.cshtml">
+            <p>
+                <strong>Dream</strong><br />
+                Female<br />
+                Seattle, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/J.R..jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0006J.R..cshtml">
+            <p>
+                <strong>J.R.</strong><br />
+                Male<br />
+                Redmond, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/John.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0007John.cshtml">
+            <p>
+                <strong>John</strong><br />
+                Male<br />
+                Redmond, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/Sky.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0008Sky.cshtml">
+            <p>
+                <strong>Sky</strong><br />
+                Female<br />
+                Burian, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/Erick.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0009Erick.cshtml">
+            <p>
+                <strong>Erick</strong><br />
+                Male<br />
+                Redmond, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-5 col-sm-3 centerbox">
+        <img src="images/selling cat/Pablo.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0010Pablo.cshtml">
+            <p>
+                <strong>Pablo</strong><br />
+                Male<br />
+                Redmond, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-6 col-sm-3 centerbox">
+        <img src="images/selling cat/Fatty Belly.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0011Fatty Belly.cshtml">
+            <p>
+                <strong>fatty Belly</strong><br />
+                Male<br />
+                Renton, WA
+            </p>
+        </a>
+    </div>
+    <div class="col-xs-6 col-sm-3 centerbox">
+        <img src="images/selling cat/Toppy.jpg"
+             height="180"
+             width="190" />
+        <a href="~/SellingCatPages/0012Toppy.cshtml">
+            <p>
+                <strong>Toppy</strong><br />
+                Male<br />
+                Renton, WA
+            </p>
+        </a>
+    </div>
+
+
+</section>
+@* Display a cookie when the users log in *@
+@if (Session["username2"] == null)
+{ }
+else
+{
+    foreach (string x in Request.Cookies)
+    {
+        if (Request.Cookies[x].HasKeys)
+        {
+            foreach (string y in Request.Cookies[x].Values)
+            {
+                if (y == "lastVist")
+                {
+                    <p>last visted: @Request.Cookies[x][y]</p>
+                }
+
+            }
+
+        }
+    }
+}    

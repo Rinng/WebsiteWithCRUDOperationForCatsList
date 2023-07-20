@@ -1,0 +1,133 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Ca Breed";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var catBreed = "";
+    var description = "";
+    var picture = "";
+    var catBreedId = "";
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            catBreedId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM CatBreed WHERE CatBreedId = '{0}'", catBreedId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        catBreed = result["CatBreed"].ToString();
+                        description = result["Description"].ToString();
+                        picture = result["Pictures"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No cat breed was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No cat breed was found for that ID.");
+        }
+    }
+
+    //UPDATE CAT BREED
+    if (IsPost)
+    {
+        Validation.RequireField("catBreed", "You haven't entered Cat Breed");
+        Validation.RequireField("cardId", "No card ID was submitted!");
+
+        catBreed = Request.Form["catBreed"];
+        description = Request.Form["description"];
+        picture = Request.Form["picture"];
+        catBreedId = Request.Form["catBreedId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("UPDATE CatBreed SET  CatBreed = '{0}', Description = '{1}', "
+                    + "Pictures = '{2}' WHERE CatBreedId = '{3}'",
+                   catBreed, description, picture, catBreedId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDCatBreed");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Update The Breed</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            
+            <label for="catBreed">Cat Breed:</label>
+            <input type="text" name="catBreed" value="@catBreed" />
+        </p>
+
+        <p>
+            
+            <label for="description">Description:</label>
+            <input type="text" name="description" value="@description" />
+        </p>
+
+        <p>
+           
+            <label for="picture">picture:</label>
+            <input type="file" name="picture" value="@picture" />
+        </p>
+       
+        <input type="hidden" name="catBreedid" value="@catBreedId" />
+        <p><input type="submit" name="buttonUpdate" value="Update Breed" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCatBreed.cshtml">Return to Cat Breed listing</a></p>
+</form>

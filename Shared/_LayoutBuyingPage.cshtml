@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="~/css/bootstrap-4.0.0/dist/css/bootstrap.min.css" />
+    <title>@Page.Title</title>
+    <link href="~/css/sellingCat/0002Fur.css" rel="stylesheet" type="text/css" />
+     
+</head>
+<body>
+    <div class="page">
+
+        <div id="header">
+            <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+            <h4>Where cat lover meet</h4>
+            <nav>
+
+
+                <ul>
+                    <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+                    <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+                    <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+                    @* display about my account tag when user login *@
+                    @if (Session["username2"] == null)
+                    { }
+                    else
+                    {
+                        <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+                    }
+                </ul>
+            </nav>
+        </div>        
+        <div id="main">
+            @RenderBody()
+        </div>
+        <div id="footer">
+            <p>&copy; Cat loving</p>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <!--JS Bootstrap-->
+    <script src="css/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Orders";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var catId = "";
+    var orderDate = "";
+    var pickupLocation = "";
+    var pickupTime = "";
+    var orderId = "";
+
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            orderId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM Orders WHERE OrderId = '{0}'", orderId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        catId = result["CatId"].ToString();
+                        orderDate = result["OrderDate"].ToString();
+                        pickupLocation = result["PickupLocation"].ToString();
+                        pickupTime = result["PicupTime"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No order was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No order was found for that ID.");
+        }
+    }
+
+    //delete the card
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+
+        orderId = Request.Form["OrderId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("DELETE FROM Orders WHERE OrderId='{0}'", orderId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDOrders");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Delete a Card</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            <span>Cat ID:</span>
+            <span>@catId</span>
+        </p>
+
+        <p>
+            <span>Order Date:</span>
+            <span>@orderDate</span>
+        </p>
+
+        <p>
+            <span>Pick up Location:</span>
+            <span>@pickupLocation</span>
+        </p>
+        <p>
+            <span>Pick up Time:</span>
+            <span>@pickupTime</span>
+        </p>
+        
+        <input type="hidden" name="orderid" value="@orderId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Order" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDOrders.cshtml">Return to Orders listing</a></p>
+</form>

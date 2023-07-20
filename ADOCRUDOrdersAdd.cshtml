@@ -1,0 +1,86 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Orders";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+
+    //add the order
+    if (IsPost)
+    {
+        var catId = Request.Form["catId"].AsInt();
+        var orderDate = Request.Form["orderDate"];
+        var pickupLocation = Request.Form["pickupLocation"];
+        var pickupTime = Request.Form["pickupTime"];
+
+
+       @Function.AddOrderFunc(catId, orderDate, pickupLocation, pickupTime);
+
+        Response.Redirect("~/ADOCRUDOrders");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Add an Order</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            
+            <label for="catId">Cat ID:</label>
+            <input type="text" name="catId" value="" />
+        </p>
+
+        <p>
+         
+            <label for="orderDate">Order Date:</label>
+            <input type="text" name="orderDate" value="" />
+        </p>
+
+        <p>
+            
+            <label for="pickupLocation">Pick up Location:</label>
+            <input type="text" name="pickupLocation" value="" />
+        </p>
+        <p>
+            
+            <label for="pickupTime">Pickup Time:</label>
+            <input type="text" name="pickupTime" value="" />
+        </p>
+        
+        <input type="hidden" name="orderid" value="" />
+        <p><input type="submit" name="buttonAdd" value="Add Order" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDOrders.cshtml">Return to Orders listing</a></p>
+</form>

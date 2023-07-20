@@ -1,0 +1,147 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Searching Infomation";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    List<SeachInfo> infoList = new List<SeachInfo>();
+    string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+
+    using (SqlConnection con = new SqlConnection(cstr))
+    {
+        con.Open();
+
+        // define the query
+        string query = "SELECT Members.FName, Members.LName, Members.Address, Members.City, "
+           +"Members.State, Members.Zip, CardNumber, CatName, CatBreed, Price"+
+           " FROM CatBreed INNER JOIN Cats ON CatBreed.CatBreedId = Cats.CatBreedId INNER JOIN Members"
+           +" ON Cats.CatId = Members.CatId INNER JOIN Cards ON Members.MemberId = Cards.MemberId";
+        //searching
+        string searchTerm = String.Empty;
+        if (!Request.QueryString["searchMember"].IsEmpty())
+        {
+            searchTerm = Request.QueryString["searchMember"];
+            query = String.Format("SELECT Members.FName, Members.LName, Members.Address, Members.City, "
+           + "Members.State, Members.Zip, CardNumber, CatName, CatBreed, Price" +
+           " FROM CatBreed INNER JOIN Cats ON CatBreed.CatBreedId = Cats.CatBreedId INNER JOIN Members"
+           + " ON Cats.CatId = Members.CatId INNER JOIN Cards ON Members.MemberId = Cards.MemberId"+
+           " WHERE Members.FName = '{0}' OR Members.LName = '{0}'", searchTerm);
+        }
+        
+        
+
+        
+            
+        //seaching cat name
+       else if (!Request.QueryString["searchCatName"].IsEmpty())
+        {
+            searchTerm = "%" + Request.QueryString["searchCatName"] + "%";
+            query = String.Format("SELECT Members.FName, Members.LName, Members.Address, Members.City, "
+           + "Members.State, Members.Zip, CardNumber, CatName, CatBreed, Price" +
+           " FROM CatBreed INNER JOIN Cats ON CatBreed.CatBreedId = Cats.CatBreedId INNER JOIN Members"
+           + " ON Cats.CatId = Members.CatId INNER JOIN Cards ON Members.MemberId = Cards.MemberId" +
+           " WHERE CatName LIKE '{0}'", searchTerm);
+        }
+
+        //seraching cat breed
+        else if (Request.QueryString["searchCatbreed"] == null || Request.QueryString["searchCatbreed"] == "ai")
+        {
+            query = String.Format("SELECT Members.FName, Members.LName, Members.Address, Members.City, "
+           + "Members.State, Members.Zip, CardNumber, CatName, CatBreed, Price" +
+           " FROM CatBreed INNER JOIN Cats ON CatBreed.CatBreedId = Cats.CatBreedId INNER JOIN Members"
+           + " ON Cats.CatId = Members.CatId INNER JOIN Cards ON Members.MemberId = Cards.MemberId");
+        }
+        else
+        {
+            searchTerm = Request.QueryString["searchCatBreed"];
+            query = String.Format("SELECT Members.FName, Members.LName, Members.Address, Members.City, "
+           + "Members.State, Members.Zip, CardNumber, CatName, CatBreed, Price" +
+           " FROM CatBreed INNER JOIN Cats ON CatBreed.CatBreedId = Cats.CatBreedId INNER JOIN Members"
+           + " ON Cats.CatId = Members.CatId INNER JOIN Cards ON Members.MemberId = Cards.MemberId" +
+           " WHERE CatBreed = '{0}'", searchTerm);
+        }
+
+
+
+        using (SqlCommand cmd = new SqlCommand(query, con))
+        {
+            using (SqlDataReader rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    infoList.Add(new SeachInfo
+                    {
+                        MemberName = rdr["FName"].ToString()+" " + rdr["LName"].ToString(),
+                        Address = rdr["Address"].ToString(),
+                        City = rdr["City"].ToString(),
+                        State = rdr["State"].ToString(),
+                        Zip = rdr["Zip"].ToString(),
+                        CardNumber = rdr["CardNumber"].ToString(),
+                        CatName = rdr["CatName"].ToString(),
+                        CatBreed = rdr["CatBreed"].ToString(),
+                        CatPirce= Convert.ToDecimal(rdr["Price"])
+                    });
+                }
+            }
+        }
+    }
+
+    }
+    @section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+
+
+<div>
+    <h1>Member and Cat Infomation</h1>
+    <form method="get">
+        <div>
+            <label for="SearchMember">Member that you looking for:</label>
+            <input type="text" name="searchMember" value="" />
+            <input type="Submit" value="Search Member Name" /><br />
+        </div>
+        <div>
+            <label for="searchCatName">Cat to look for:</label>
+            <input type="text" name="searchCatName"
+                   value="" />
+            <input type="Submit" value="Search Cat Name" /><br />
+        </div>  
+        <div>
+            <label for="searchCatBreed">What Cat bredd you look for:</label>
+            <select name="searchCatBreed">
+                <option value="ai">choose your cat breed</option>
+                <option value="Scottish Folder">Scottish Folder</option>
+                <option value="Maine coon">Maine coon</option>
+                <option value="Singapura cat">Singapura cat</option>
+                <option value="American shorthair">American shorthair</option>
+            </select>
+            <input type="Submit" value="Search Cat Breed" name="drop" /><br />
+        </div>     
+    </form>
+    
+    <div>@Helper.SearchInfo(infoList)</div>
+</div>

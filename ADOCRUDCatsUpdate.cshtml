@@ -1,0 +1,185 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Update Cat";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var catBreedId = "";
+    var catname = "";
+    var dob = "";
+    var catGender = "";
+    var catColor = "";
+    var sellingLocation = "";
+    var price = "";
+    var sellingStatus = "";
+    var catId = "";
+
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            catId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM Cats WHERE CatId = '{0}'", catId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        catBreedId = result["CatBreedID"].ToString();
+                        catname = result["CatName"].ToString();
+                        dob = result["DOB"].ToString();
+                        catGender = result["CatGender"].ToString();
+                        catColor = result["CatColor"].ToString();
+                        sellingLocation = result["SellingLocation"].ToString();
+                        price = result["price"].ToString();
+                        sellingStatus = result["SaleStatuts"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No cat was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No cat was found for that ID.");
+        }
+    }
+
+    //update the cat
+    if (IsPost)
+    {
+
+        Validation.RequireField("catBreedId", "You must enter a Cat Breed ID");
+        Validation.RequireField("catname", "Cat's name is required");
+        Validation.RequireField("dob", "You haven't entered cat's birthday yet!");
+        Validation.RequireField("catGender", "You haven't enterd cat gender");
+        Validation.RequireField("catColor", "You haven't entered cat color");
+        Validation.RequireField("sellingLocation", "You haven't entered selling location");
+        Validation.RequireField("price", "You haven't entered price");
+        Validation.RequireField("sellingStatus", "You haven't entered selling status");
+        Validation.RequireField("catId", "No cat ID was submitted!");
+
+        catBreedId = Request.Form["catBreedId"];
+        catname = Request.Form["catname"];
+        dob = Request.Form["dob"];
+        catGender = Request.Form["catGender"];
+        catColor = Request.Form["catColor"];
+        sellingLocation = Request.Form["sellingLocation"];
+        price = Request.Form["price"];
+        sellingStatus = Request.Form["sellingStatus"];
+        catId = Request.Form["catId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("UPDATE Cats SET  CatBreedId= '{0}', CatName = '{1}', "
+                    + "DOB = '{2}', CatGender = '{3}', CatColor = '{4}', "
+                    + "SellingLocation = '{5}', Price = '{6}', SaleStatuts = '{7}' WHERE CatId = '{8}'",
+                    catBreedId, catname, dob, catGender, catColor, sellingLocation, price,
+                    sellingStatus, catId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDCats");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Update a Cat</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Cat Information</legend>
+
+        <p>
+            <label for="catBreedId">Cat Breed ID:</label>
+            <input type="text" name="catBreedId" value="@catBreedId" />
+        </p>
+
+        <p>
+            
+            <label for="catname">Cat's Name:</label>
+            <input type="text" name="catname" value="@catname" />
+        </p>
+
+        <p>
+           
+            <label for="dob">Cat's Birthday:</label>
+            <input type="text" name="dob" value="@dob" />
+        </p>
+        <p>
+           
+            <label for="catGender">Cat Gender:</label>
+            <input type="text" name="catGender" value="@catGender" />
+        </p>
+
+        <p>
+            <label for="catColor">Cat Color:</label>
+            <input type="text" name="catColor" value="@catColor" />
+        </p>
+
+        <p>
+            
+            <label for="sellingLocation">Selling Location:</label>
+            <input type="text" name="sellingLocation" value="@sellingLocation" />
+        </p>
+        <p>
+            
+            <label for="price">Set Price:</label>
+            <input type="text" name="price" value="@price" />
+        </p>
+
+        <p>
+            
+            <label for="sellingStatus">Selling Status:</label>
+            <input type="text" name="sellingStatus" value="@sellingStatus" />
+        </p>
+
+        <input type="hidden" name="catid" value="@catId" />
+        <p><input type="submit" name="buttonUpdate" value="Update Cat" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCats.cshtml">Return to Cats listing</a></p>
+</form>

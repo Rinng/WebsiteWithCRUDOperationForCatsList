@@ -1,0 +1,103 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "browsing of records from your database with no user interaction";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    List<CatBreed> breedList = new List<CatBreed>();
+    string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+
+    using (SqlConnection con = new SqlConnection(cstr))
+    {
+        con.Open();
+
+        // define the query
+        string query = "SELECT * FROM CatBreed";
+
+        string searchTerm = "";
+        //seaching cat breed name
+        if (!Request.QueryString["searchCatBreed"].IsEmpty())
+        {
+            searchTerm = "%" + Request.QueryString["searchCatBreed"] + "%";
+            query = String.Format("SELECT * FROM CatBreed WHERE CatBreed LIKE '{0}'", searchTerm);
+        }
+
+        using (SqlCommand cmd = new SqlCommand(query, con))
+        {
+            using (SqlDataReader rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    breedList.Add(new CatBreed
+                    {
+                        CatBreedId = Convert.ToInt32(rdr["CatBreedId"]),
+                        CatBreeds = rdr["CatBreed"].ToString(),
+                        Description = rdr["Description"].ToString(),
+                        picture = rdr["Pictures"].ToString()
+                    });
+                }
+            }
+        }
+    }
+    var grid = new WebGrid(source: breedList, defaultSort: "CatBreed", rowsPerPage: 4);
+    }
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+
+
+<div>
+    <p>Management another tables data</p>
+    <a href="~/ADOCRUDCats.cshtml">Cats table</a>&nbsp;&nbsp;
+    <a href="~/ADOCRUDMembers.cshtml">Members Table</a>&nbsp;&nbsp;
+    <a href="~/ADOCRUDCard.cshtml">Card table</a>&nbsp;&nbsp;
+    <a href="~/ADOCRUDOrders.cshtml">Order table</a>
+    <br /><br />
+    <div>
+        <form method="get">
+            <label for="SearchCatBreed">Cat Breed name that you looking for:</label>
+            <input type="text" name="searchCatBreed" value="@Request.QueryString["searchCatBreed"]" />
+            <input type="Submit" value="Search Cat Breed" /><br />
+        </form>
+    </div>
+    <br /><br />
+
+    <p><a href="~/ADOCRUDCatBreedAdd.cshtml">Adding the Breed</a></p>
+    @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
+        columns: grid.Columns(
+            grid.Column(format: @<a href="~/ADOCRUDCatBreedUpdate?id=@item.CatBreedId">Update</a>),
+            grid.Column("CatBreedId"),
+            grid.Column("CatBreeds"),
+            grid.Column("Description"),
+            grid.Column("picture"),
+            grid.Column(format: @<a href="~/ADOCRUDCatBreedDelete?id=@item.CatBreedId">Delete</a>)
+       )
+    )
+</div>

@@ -1,0 +1,152 @@
+﻿@{
+    Page.Title = "Cat Lovers";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+    <script type="text/javascript" src="~/js/ValidateLoginForm.js"></script>
+
+    if (Session["username2"] == null)
+    {
+        Session["username2"] = Request.Form["username"];
+    }
+
+    Response.Cookies["numVisited"].Expires = DateTime.Now.AddYears(2);
+    //count how many time the user come to page by cookies
+    int count = Request.Cookies["numVisited"].Value.AsInt();
+   
+    if(count == 0)
+    {
+        count = 1;
+        Response.Cookies["numVisited"].Value = count.ToString();
+    }
+    else
+    {
+        count++;
+        Response.Cookies["numVisited"].Value = count.ToString();
+
+    }
+
+    //cookies for user imfomation
+    Response.Cookies["member"]["username"] = Request.Form["username"];
+    ////set persistent cookie to browser
+    
+    //create a place holder for last time visited
+    var lastVisit = "";
+    //get a cookies for last time login time
+    Response.Cookies["member"]["lastVist"] = DateTime.Now.ToString();
+    if (Request.Cookies["member"] != null)
+    {
+        lastVisit = Request.Cookies["member"]["lastVist"];
+    }
+    //
+    Response.Cookies["member"].Expires = DateTime.Now.AddYears(2);
+}
+
+@section header {
+<h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+<h4>Where cat lover meet</h4>
+    <nav>
+    <ul>
+        <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+        <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+        <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+        @* display about my account tag when user login *@
+        @if (Session["username2"] == null)
+        { }
+        else
+        {
+            <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+        }
+    </ul>
+</nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+       
+<!--boddy content-->
+
+<section>
+    @* Dispaly welcome message when the user log in *@
+        @if (Session["username2"] == null)
+        { }
+        else
+        {<p id="greet">Welcome back @Session["username2"]</p> }
+        <aside>
+            <br />
+            <a href="~/LoginForm.cshtml" ; id="register">
+                @if (Session["username2"] == null)
+                { 
+                    <b>SignIn / Register</b>
+                }
+                else
+                {
+                    <b>Signout</b>
+                }
+            </a>   
+    <section>
+        <h2>Top cutest cat for sale</h2>
+        <a href="~/sellingCatPages/Vicky0001.cshtml">baby Scottish Fold cat</a>
+        <a href="~/SellingCatPages/0002Fur.cshtml">mysteries Fur</a>
+        <a href="~/SellingCatPages/0003Pong.cshtml">Baby cute cat</a>
+        <a href="~/SellingCatPages/0004Christina.cshtml">Small cat with big cutest eyes</a>
+    </section>
+    <section>
+        <h2>Contact by email:</h2>
+        <a href="mailto:rinnguyenhcc@gmail.com">LovingCat@gmail.com</a>
+        <!--using class prederfine in bootstrap-->
+        <span class="text-danger"><b>Like Us at:</b></span><br />
+        <a href="~/Unavailable.cshtml">Facebook</a>
+        <a href="~/Unavailable.cshtml">Twister</a>
+        <a href="~/Unavailable.cshtml">Instagram</a>
+    </section>
+
+    </aside>
+    <p class="indent-paragraph">
+        <img src="images/American-Shorthair-kitten-cute.jpg"
+             class="left-pic"
+             alt="cute cat"
+             title="cutest cat"
+             width="300" height="200" />
+        Welcome on board! Where is the <br /> cat lover come together to sharing the cutest moment of their cat.
+        If you are like most cat owners, you want to be the best cat lover you can be... this website can help.
+        The cat, also known as the domestic cat or housecat to distinguish it from other felids and felines,
+        is a small, usually furry, domesticated, carnivorous mammal that is valued by humans for its companionship
+        and for its ability to hunt vermin and household pests.
+
+        Cats have been associated with humans for at least 9,500 years, and are currently the most popular
+        pet in the world. Owing to their close association with humans, cats are now found almost everywhere in
+        the world. Here we have collected of Cute Cats Make Your Life Happier.
+
+    </p>
+
+    <p class="indent-paragraph">
+        <img src="images/lovingCat.jpg"
+             class="right-pic"
+             alt="cute cat"
+             title="cutest cat"
+             width="300" height="200" />
+        Scientists said that having a cat helped to relieve stress and anxiety, which is known to help
+        protect against heart disease by lowering blood pressure and reducing the heart rate.
+
+        The study looked at 4,435 adults aged between 30 and 75, about half of whom owned a cat.
+
+        The findings, presented at a stroke conference in America, showed that 3.4 per cent of the cat owners
+        died from a heart attack over 10 years. Among the group who had never owned a cat the rate was 5.8 per cent.
+        Cat owners still had a much reduced chance of developing strokes or heart attacks when researchers took
+        account of other factors known to trigger heart disease, including high cholesterol levels, smoking and diabetes.
+        What do you waiting for? Get for your own a cat!
+        
+    </p>
+   @* display cookies about the last time their visted to the website  when they log in*@
+   @if (Session["username2"] == null)
+   { }
+   else
+   {
+    <p>last visted is @lastVisit</p>
+   }  
+</section><!-- end content -->

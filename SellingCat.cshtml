@@ -1,0 +1,92 @@
+﻿@{
+    Page.Title = "Selling a Cat";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+    <script type="text/javascript" src="~/js/ValidateSellingForm.js"></script>
+}
+
+@section header {
+<h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+<h4>Where cat lover meet</h4>
+    <nav>
+
+
+    <ul>
+        <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+        <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+        <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+        @* display about my account tag when user login *@
+        @if (Session["username2"] == null)
+        { }
+        else
+        {
+            <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+        }
+    </ul>
+</nav>
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+       
+<!--boddy content-->
+<section>
+    @if (Session["username2"] == null)
+    { }
+    else
+    {<p id="greet">Welcome back @Session["username2"]</p> }
+    <a href="~/LoginForm.cshtml" ; id="register">
+        @if (Session["username2"] == null)
+        {
+            <b style="background:skyblue;">SignIn</b>
+        }
+        else
+        {
+            <b>Signout</b>
+        }
+    </a>
+    
+    <div class="a-box-inner">
+        <form method="get" action="~/Home.cshtml" onsubmit="return validation3()" class="form-horizontal">
+            <h2>Cat's Infomation</h2>
+            <div class="form-group">
+                <label>Cat Name: <input type="text" id="cname" name="cname" class="form-control" /></label>
+            </div>
+            <div class="form-group">
+                <label>Pickup location: </label>
+                <textarea rows="4" cols="27" id="loaction" required=""></textarea>
+            </div>
+            <div class="form-group">
+                <label>Email:<input type="email" id="email" name="email" class="form-control" /></label>
+            </div>
+            <div class="form-group">
+                <label>
+                    Cat Prices: <input type="number" id="price" name="price" class="form-control" />
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Cat's Breed: <input type="text" id="breed" name="breed" class="form-control" /></label>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">Cat Pictures</label>
+                <input type="file" id="picture" required="" />
+                <p class="help-block">Upload your cat picture here</p>
+            </div>
+            <div class="form-group">
+                <label>Cat's Description: </label>
+                <textarea rows="4" cols="27" id="description"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" id="submit" name="submit" value="Create" class="btn btn-warning btn-lg btn-block">Sell your cat</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</section>

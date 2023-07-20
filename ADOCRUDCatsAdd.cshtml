@@ -1,0 +1,109 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Update Cat";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+
+
+    //add the cat
+    if (IsPost)
+    {
+
+
+        var catBreedId = Request.Form["catBreedId"].AsInt();
+        var catname = Request.Form["catname"];
+        var dob = Request.Form["dob"];
+        var catGender = Request.Form["catGender"];
+        var catColor = Request.Form["catColor"];
+        var sellingLocation = Request.Form["sellingLocation"];
+        var price = Request.Form["price"].AsDecimal();
+        var sellingStatus = Request.Form["sellingStatus"];
+
+        @Function.AddCatFunc(catBreedId, catname, dob, catGender, catColor, sellingLocation, price, sellingStatus);    
+
+        Response.Redirect("~/ADOCRUDCats");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Update a Cat</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Cat Information</legend>
+
+        <p>
+            <label for="catBreedId">Cat Breed ID:</label>
+            <input type="text" name="catBreedId" value="" />
+        </p>
+
+        <p>
+            <label for="catname">Cat's Name:</label>
+            <input type="text" name="catname" value="" />
+        </p>
+
+        <p>
+            <label for="dob">Cat's Birthday:</label>
+            <input type="text" name="dob" value="" />
+        </p>
+        <p>
+            <label for="catGender">Cat Gender:</label>
+            <input type="text" name="catGender" value="" />
+        </p>
+
+        <p>
+            <label for="catColor">Cat Color:</label>
+            <input type="text" name="catColor" value="" />
+        </p>
+
+        <p>
+            
+            <label for="sellingLocation">Selling Location:</label>
+            <input type="text" name="sellingLocation" value="" />
+        </p>
+        <p>
+          
+            <label for="price">Set Price:</label>
+            <input type="text" name="price" value="" />
+        </p>
+
+        <p>
+            <label for="sellingStatus">Selling Status:</label>
+            <input type="text" name="sellingStatus" value="" />
+        </p>
+
+        <input type="hidden" name="catid" value="" />
+        <p><input type="submit" name="buttonAdd" value="Add Cat" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCats.cshtml">Return to Cats listing</a></p>
+</form>

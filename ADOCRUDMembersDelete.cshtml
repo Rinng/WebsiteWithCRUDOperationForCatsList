@@ -1,0 +1,151 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@{
+    Page.Title = "Delete Card";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    var catId = "";
+    var fName = "";
+    var lName = "";
+    var address = "";
+    var city = "";
+    var state = "";
+    var zip = "";
+    var memberId = "";
+
+    //get information for comfirmation
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            memberId = Request.QueryString["Id"];
+            string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(cstr))
+            {
+                con.Open();
+                string query = string.Format("SELECT * FROM Members WHERE MemberId = '{0}'", memberId);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    SqlDataReader result = cmd.ExecuteReader();
+
+
+                    if (result.HasRows)
+                    {
+                        result.Read();
+                        catId = result["CatId"].ToString();
+                        fName = result["FName"].ToString();
+                        lName = result["LName"].ToString();                        
+                        address = result["Address"].ToString();
+                        city = result["City"].ToString();
+                        state = result["State"].ToString();
+                        zip = result["Zip"].ToString();
+                    }
+                    else
+                    {
+                        Validation.AddFormError("No member was found for that ID.");
+                    }
+                }
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No member was found for that ID.");
+        }
+    }
+
+    //delete the card
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+
+        memberId = Request.Form["memberId"];
+
+        string cstr = ConfigurationManager.ConnectionStrings["ConStr"].ConnectionString;
+        using (SqlConnection con = new SqlConnection(cstr))
+        {
+            con.Open();
+            string query = string.Format("DELETE FROM Members WHERE MemberId='{0}'", memberId);
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                var result = cmd.ExecuteScalar();
+            }
+        }
+
+        Response.Redirect("~/ADOCRUDMembers");
+    }
+
+}
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Delete a Card</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            <span>Cat ID:</span>
+            <span>@catId</span>
+        </p>
+
+        <p>
+            <span>First Name:</span>
+            <span>@fName</span>
+        </p>
+
+        <p>
+            <span>Last Name:</span>
+            <span>@lName</span>
+        </p>
+        
+        <p>
+            <span>Address:</span>
+            <span>@address</span>
+        </p>
+
+        <p>
+            <span>City</span>
+            <span>@city</span>
+        </p>
+        <p>
+            <span>State:</span>
+            <span>@state</span>
+        </p>
+
+        <p>
+            <span>Zip:</span>
+            <span>@zip</span>
+        </p>
+
+        <input type="hidden" name="memberid" value="@memberId" />
+        <p><input type="submit" name="buttonDelete" value="Delete Member" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDMembers.cshtml">Return to Members listing</a></p>
+</form>

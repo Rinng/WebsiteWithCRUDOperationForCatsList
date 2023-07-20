@@ -1,0 +1,28 @@
+﻿  @{
+  Page.Title = "Looking for a cat";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+}
+
+@section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+
+
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+        </ul>
+    </nav>
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+<div class="container unbox" style="height:550px; text-align:center; line-height:500px">
+    <h1 style="text-align:center; vertical-align:middle; display:inline-block; line-height:normal;">Congrats!!! Your account has been created</h1>
+    <a href="~/LoginForm.cshtml"><h3>Back to Login page</h3></a>
+</div>

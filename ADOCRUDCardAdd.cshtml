@@ -1,0 +1,115 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+
+
+@{
+    Page.Title = "Add a Card";
+    //Layout = "Your Layout Page goes here";
+    Layout = "~/Shared/_Layout.cshtml";
+
+    if (IsPost)
+    {
+        var memberId = Request.Form["memberId"].AsInt();
+        var cardNumber = Request.Form["cardNumber"];
+        var cardHolderName = Request.Form["cardHolderName"];
+        var experationDate = Request.Form["experationDate"];
+        var securityCode = Request.Form["securityCode"];
+        var address = Request.Form["address"];
+        var city = Request.Form["city"];
+        var state = Request.Form["state"];
+        var zip = Request.Form["zip"];
+
+        @Function.AddCardFunc(memberId, cardNumber, cardHolderName, experationDate, securityCode, address,
+            city, state, zip);
+
+        Response.Redirect("~/ADOCRUDCard");
+
+    }
+
+
+}
+
+    }
+    @section header {
+    <h2><a href="~/Home.cshtml">Cat Lovers Only</a></h2>
+    <h4>Where cat lover meet</h4>
+    <nav>
+        <ul>
+            <li><a href="~/Home.cshtml"><strong>Home</strong></a></li>
+            <li><a href="~/BuyingCat.cshtml"><strong>Buying a cat</strong></a></li>
+            <li><a href="~/SellingCat.cshtml"><strong>selling a cat</strong></a></li>
+            @* display about my account tag when user login *@
+            @if (Session["username2"] == null)
+            { }
+            else
+            {
+                <li><a href="~/MyAccount.cshtml"><strong>My Account</strong></a></li>
+            }
+        </ul>
+    </nav>
+
+}
+
+@section footer {
+
+    <p>&copy; Cat loving</p>
+}
+
+
+<h2>Add a Card</h2>
+@Html.ValidationSummary()
+
+
+<form method="post">
+    @*display infromation*@
+    <fieldset>
+        <legend>Card Information</legend>
+
+        <p>
+            <label for="memberId">Member ID:</label>
+            <input type="text" name="memberId" value="" />
+        </p>
+
+        <p>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" name="cardNumber" value="" />
+        </p>
+
+        <p>
+            <label for="cardHolderName">Card Holder Name:</label>
+            <input type="text" name="cardHolderName" value="" />
+        </p>
+        <p>
+            <label for="experationDate">Experation Date:</label>
+            <input type="text" name="experationDate" value="" />
+        </p>
+        <p>
+            <label for="securityCode">Security Code:</label>
+            <input type="text" name="securityCode" value="" />
+        </p>
+
+        <p>
+            <label for="address">Address:</label>
+            <input type="text" name="address" value="" />
+        </p>
+
+        <p>
+            <label for="city">City:</label>
+            <input type="text" name="city" value="" />
+        </p>
+        <p>
+            <label for="state">State:</label>
+            <input type="text" name="state" value="" />
+        </p>
+
+        <p>
+            <label for="zip">Zip Code:</label>
+            <input type="text" name="zip" value="" />
+        </p>
+
+        <input type="hidden" name="cardid" value="" />
+        <p><input type="submit" name="buttonAdd" value="Add a Card" /></p>
+    </fieldset>
+    <p><a href="~/ADOCRUDCard">Return to Cards listing</a></p>
+</form>
