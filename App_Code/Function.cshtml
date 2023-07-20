@@ -1,0 +1,306 @@
+﻿@using System.Data.SqlClient;
+@using System.Data;
+@using System.Configuration;
+
+@functions
+{
+    public static String AddCardFunc(int memberId, string cardNumber, string cardHolderName, string experationDate,
+   string securityCode, string address, string city, string state, string zip)
+    {
+        if (memberId <= 0 || cardNumber.IsEmpty() || cardHolderName.IsEmpty() || experationDate.IsEmpty()
+            || address.IsEmpty() || city.IsEmpty() || state.IsEmpty() || zip.IsEmpty())
+        {
+            Response.Write("Missing info!!!");
+            return "";
+        }
+        else
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConStr"].ToString()))
+            {
+
+                // Open the connection
+                con.Open();
+                // Create a SELECT query.
+                string query = "SELECT * FROM Cards";
+
+
+                // Create a SqlDataAdapter object
+                // SqlDataAdapter represents a set of data commands and a
+                // database connection that are used to fill the DataSet and
+                // update a SQL Server database.
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Cards");
+
+                // Create a new instance of a DataTable.
+                DataTable tb = ds.Tables["Cards"];
+                // Obtain a new DataRow object from the DataTable.
+                DataRow drCurrent = tb.NewRow();
+                // Set the DataRow field values as necessary.
+
+
+                drCurrent["MemberId"] = memberId;
+                drCurrent["CardNumber"] = cardNumber;
+                drCurrent["CardHolderName"] = cardHolderName;
+                drCurrent["ExperationDate"] = experationDate;
+                drCurrent["SecurityCode"] = securityCode;
+                drCurrent["Address"] = address;
+                drCurrent["City"] = city;
+                drCurrent["State"] = state;
+                drCurrent["zip"] = zip;
+
+                //prevent duplicate
+                //var counter = 0;
+                //for (int i = 0; i < tb.Rows.Count; i++)
+
+                //{
+                //    if (drCurrent["Mem"].ToString() == tb.Rows[i]["FirstName"].ToString() &&
+                //        drCurrent["LastName"].ToString() == tb.Rows[i]["LastName"].ToString())
+                //    {
+                //        counter++;
+                //    }
+                //}
+                //if (counter > 0)
+                //{
+
+                //}
+                //else
+                //{
+                tb.Rows.Add(drCurrent);
+                //}
+
+
+                // Commit the changes
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da);
+                da.Update(ds, "Cards");
+                return "";
+
+            }
+        }
+    }
+
+    public static String AddCatBreedFunc(string catBreed, string description, string picture)
+    {
+        if (catBreed.IsEmpty())
+        {
+            Response.Write("Missing info!!!");
+            return "";
+        }
+        else
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConStr"].ToString()))
+            {
+
+                // Open the connection
+                con.Open();
+                // Create a SELECT query.
+                string query = "SELECT * FROM CatBreed";
+
+
+                // Create a SqlDataAdapter object
+                // SqlDataAdapter represents a set of data commands and a
+                // database connection that are used to fill the DataSet and
+                // update a SQL Server database.
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "CatBreed");
+
+                // Create a new instance of a DataTable.
+                DataTable tb = ds.Tables["CatBreed"];
+                // Obtain a new DataRow object from the DataTable.
+                DataRow drCurrent = tb.NewRow();
+                // Set the DataRow field values as necessary.
+
+
+                drCurrent["CatBreed"] = catBreed;
+                drCurrent["Description"] = description;
+                // drCurrent["Pictures"] = picture;
+
+
+                tb.Rows.Add(drCurrent);
+                //}
+
+
+                // Commit the changes
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da);
+                da.Update(ds, "CatBreed");
+                return "";
+
+            }
+        }
+    }
+
+    public static String AddCatFunc(int catBreedId, string catName, string dob, string catGender,
+   string catColor, string sellingLocation, decimal price, string sellingStatus)
+    {
+        if (catBreedId <= 0 || catName.IsEmpty() || dob.IsEmpty() || catGender.IsEmpty()
+            || catColor.IsEmpty() || sellingLocation.IsEmpty() || price<=0 || sellingStatus.IsEmpty())
+        {
+            Response.Write("Missing info!!!");
+            return "";
+        }
+        else
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConStr"].ToString()))
+            {
+
+                // Open the connection
+                con.Open();
+                // Create a SELECT query.
+                string query = "SELECT * FROM Cats";
+
+
+                // Create a SqlDataAdapter object
+                // SqlDataAdapter represents a set of data commands and a
+                // database connection that are used to fill the DataSet and
+                // update a SQL Server database.
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Cats");
+
+                // Create a new instance of a DataTable.
+                DataTable tb = ds.Tables["Cats"];
+                // Obtain a new DataRow object from the DataTable.
+                DataRow drCurrent = tb.NewRow();
+                // Set the DataRow field values as necessary.
+
+
+                drCurrent["CatBreedId"] = catBreedId;
+                drCurrent["CatName"] = catName;
+                drCurrent["DOB"] = dob;
+                drCurrent["CatGender"] = catGender;
+                drCurrent["CatColor"] = catColor;
+                drCurrent["SellingLocation"] = sellingLocation;
+                drCurrent["Price"] = price;
+                drCurrent["SaleStatuts"] = sellingStatus;
+
+
+
+                tb.Rows.Add(drCurrent);
+                //}
+
+
+                // Commit the changes
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da);
+                da.Update(ds, "Cats");
+                return "";
+
+            }
+        }
+    }
+
+    public static String AddMemberFunc(int catId, string fName, string lName,
+   string address, string city, string state, string zip, string phone)
+    {
+        if (catId <= 0 || fName.IsEmpty() || lName.IsEmpty() || address.IsEmpty()
+            || city.IsEmpty() || state.IsEmpty() || zip.IsEmpty() || phone.IsEmpty())
+        {
+            Response.Write("Missing info!!!");
+            return "";
+        }
+        else
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConStr"].ToString()))
+            {
+
+                // Open the connection
+                con.Open();
+                // Create a SELECT query.
+                string query = "SELECT * FROM Members";
+
+
+                // Create a SqlDataAdapter object
+                // SqlDataAdapter represents a set of data commands and a
+                // database connection that are used to fill the DataSet and
+                // update a SQL Server database.
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Members");
+
+                // Create a new instance of a DataTable.
+                DataTable tb = ds.Tables["Members"];
+                // Obtain a new DataRow object from the DataTable.
+                DataRow drCurrent = tb.NewRow();
+                // Set the DataRow field values as necessary.
+
+
+                drCurrent["catId"] = catId;
+                drCurrent["FName"] = fName;
+                drCurrent["LName"] = lName;
+                drCurrent["Address"] = address;
+                drCurrent["City"] = city;
+                drCurrent["State"] = state;
+                drCurrent["zip"] = zip;
+                drCurrent["Phone"] = phone;
+
+             
+                tb.Rows.Add(drCurrent);
+                //}
+
+
+                // Commit the changes
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da);
+                da.Update(ds, "Members");
+                return "";
+
+            }
+        }
+    }
+
+    public static String AddOrderFunc(int catId, string orderDate, string pickupLocation, string pickupTime)
+    {
+        if (catId <= 0 || orderDate.IsEmpty() || pickupLocation.IsEmpty() || pickupTime.IsEmpty())
+        {
+            Response.Write("Missing info!!!");
+            return "";
+        }
+        else
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConStr"].ToString()))
+            {
+
+                // Open the connection
+                con.Open();
+                // Create a SELECT query.
+                string query = "SELECT * FROM Orders";
+
+
+                // Create a SqlDataAdapter object
+                // SqlDataAdapter represents a set of data commands and a
+                // database connection that are used to fill the DataSet and
+                // update a SQL Server database.
+                SqlDataAdapter da = new SqlDataAdapter(query, con);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Orders");
+
+                // Create a new instance of a DataTable.
+                DataTable tb = ds.Tables["Orders"];
+                // Obtain a new DataRow object from the DataTable.
+                DataRow drCurrent = tb.NewRow();
+                // Set the DataRow field values as necessary.
+
+
+                drCurrent["CatId"] = catId;
+                drCurrent["OrderDate"] = orderDate;
+                drCurrent["PickupLocation"] = pickupLocation;
+                drCurrent["PicupTime"] = pickupTime;
+
+                
+                tb.Rows.Add(drCurrent);
+                //}
+
+
+                // Commit the changes
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da);
+                da.Update(ds, "Orders");
+                return "";
+
+            }
+        }
+    }
+}

@@ -1,0 +1,33 @@
+﻿@helper SearchInfo(List<SeachInfo> list) {
+    <div>
+        <table border="1">
+            <tr>
+                <th>Member Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>Card Number</th>
+                <th>Cat Name</th>
+                <th>Cat Breed</th>
+                <th>Cat Price</th>
+            </tr>
+            @foreach (var p in list)
+            {
+                <tr>
+                    @* print out the results *@
+                    <td>@p.MemberName</td>
+                    <td>@p.Address</td>
+                    <td>@p.City</td>
+                    <td>@p.State</td>
+                    <td>@p.Zip</td>
+                    <td>@p.CardNumber</td>
+                    <td>@p.CatName</td>
+                    <td>@p.CatBreed</td>
+                    <td>@p.CatPirce.ToString("C")</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
