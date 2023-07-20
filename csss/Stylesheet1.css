@@ -1,0 +1,194 @@
+﻿
+#header, section, #footer, aside {
+				display: block;}
+body {
+	/* .. to go up a directory then access images*/
+	background:url(../images/cuteCat.jpg);
+    background-position:center;
+    margin: 0px;
+}
+
+div.page {
+    background:skyblue;
+	width:1000px; /*width of page*/
+	margin:0 auto;	/*center horizonally*/
+}
+
+#header {	
+    background:url(../images/headerCat.jpg);    
+	border:2px solid #5b75be;
+    color: rgba(212, 226, 221, 0.9);    	
+	margin:0 auto;
+    height:100px;
+    width:1000px;
+    
+}
+
+nav {
+    clear: both;				
+	background:url(../images/headerCat.jpg);
+    margin: 26px;
+    margin-left: 0px;
+    height:20px;
+    width:500px;
+    
+	}
+nav ul {
+	margin: 0px;
+	padding: 0px 0px 5px 30px;
+    text-align:left;
+}
+nav li {
+	display: inline;
+	margin-right: 20px;   
+}
+nav li a {
+    text-decoration:none;
+		}
+nav li a:hover{
+	color: #000000;}
+section {
+	border:2px solid #5b75be;
+    background:skyblue;
+	width:1000px; /*width of page*/
+	margin:0px auto;
+}
+
+#footer {
+	background:url(../images/thumb-350-439570.jpg);
+	border:2px solid #5b75be;
+    width:1000px;
+    margin:0px auto;
+    text-align:left;
+}
+
+/*** header fonts ***/
+h2 a {
+	color:#3b30d1;
+	text-decoration:none;	/* remove the underline */ 
+               
+}
+h4{
+    color:#808080;
+      font-family:Arial; /*choose Arial font*/
+      font-size:15px; /*make font size a litle bit smaller*/
+      font-weight:400; /*reduce the boldness*/
+      text-align:center; /*center align*/
+      margin:0 auto;	/*center horizonally*/
+}
+h2{
+    text-align:center; /*center align*/
+    line-height:1.0em; /*reduce the height of the text*/
+    text-transform:capitalize; /*capitalize the girst letter*/
+    margin:0 auto;	/*center horizonally*/
+}
+h2.signform{
+    margin-right:100px;
+    color:black;
+    font-size:21px;
+}
+.indent-paragraph{
+    text-indent:25px;   /*inder the paragraph*/
+    padding-left:10px; /*padding a hole paragraph*/
+    font-weight:500; /*reduce the boldness*/
+    font-size:20px;
+    text-align:left;
+    
+}
+input {
+    border: 2px solid groove; 
+    border-radius: 4px;/*customize the egde of the input field*/
+}
+#signin {
+    margin-top:-118px; /*Postion the login form*/
+    float:right;
+    
+}
+#register{
+   float:right;
+margin-top:-25px;
+/*margin-right:149px;*/
+/*margin-left:40px;*/
+}
+#register:hover{
+    background-color:#efefef;
+}
+input.button{
+    margin-left:40px;   /*make the sign in button stand at the middle*/
+}
+.left-pic{
+    float:left;/*make the 1st cutest cat picture float left*/
+    /*Transition*/
+    -moz-transition:-moz-transform 2s;	-webkit-transition:-webkit-transform 2s;	-o-transition:-o-transform 2s;	-ms-transition:-ms-transform 2s;	transition:transform 2s;
+
+}
+.left-pic:hover{
+    -moz-transform:translate(-150px, 0px) rotate(-25deg) scale(1.5);	-webkit-transform:translate(-150px, 0px) rotate(-25deg) scale(1.5);	-o-transform:translate(-150px, 0px) rotate(-25deg) scale(1.5);	-ms-transform:translate(-150px, 0px) rotate(-25deg) scale(1.5);	transform:translate(-150px, 0px) rotate(-25deg) scale(1.5);
+}
+.right-pic{
+    float:right;/*make the 2nd Cutest Cat picture float right*/
+    /*Transition*/
+    -moz-transition:-moz-transform 2s;	-webkit-transition:-webkit-transform 2s;	-o-transition:-o-transform 2s;	-ms-transition:-ms-transform 2s;	transition:transform 2s;
+}
+.right-pic:hover{
+    -moz-transform:translate(150px, 0px) rotate(25deg) scale(0.75);	-webkit-transform:translate(150px, 0px) rotate(25deg) scale(0.75);	-o-transform:translate(150px, 0px) rotate(25deg) scale(0.75);	-ms-transform:translate(150px, 0px) rotate(25deg) scale(0.75);	transform:translate(150px, 0px) rotate(25deg) scale(0.75);
+}
+
+aside {
+	width: 190px;
+	float: right;
+	padding: 0px 0px 0px 20px;
+    border-left:1px solid #eeeeee;
+}
+aside section{
+    width: 165px;
+    border:none;
+}
+aside section a {
+    text-decoration:none;
+    color:#0519fb;
+	display: block;
+	padding: 10px;
+	border-bottom: 1px solid #eeeeee;}
+aside section a:hover {
+	color: #985d6a;
+	background-color: #efefef;}
+aside h2 {
+	padding: 30px 0px 10px 0px;
+	color: #fe550a;}
+
+/*buy cat site*/
+.center{
+   margin:auto;
+}
+ /*div:nth-child(odd){
+     background:rgba(212, 226, 221, 0.9);
+     border:1px solid #eeeeee;
+     width:25%;
+     margin:1%;
+     float:left;
+ }*/
+.centerbox{
+     background:rgba(212, 226, 221, 0.9);
+     border:1px solid #eeeeee;
+     text-align:center;
+ }
+div{
+    text-align:center;
+}
+/*Inner box class for selling cat page*/
+div.a-box-inner{
+    align-content:center;
+    align-items:center;
+    width:250px;
+    border:1px solid #eeeeee;
+    margin:auto;
+    background:skyblue;
+}
+
+.unbox{background:skyblue;}
+
+#greet{
+    padding-left:700px;
+    
+}
